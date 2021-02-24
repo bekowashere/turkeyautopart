@@ -1,0 +1,18 @@
+PostgreSQL eklenecek:
+
+Install requirements:
+pip install psycopg2
+pip install psycopg2-binary
+
+
+settings.py:
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'nlconvdb',
+        'USER': 'postgres',
+        'PASSWORD': 'Berke1919*-',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}

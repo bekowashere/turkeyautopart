@@ -1,0 +1,16 @@
+Create React Project:
+npx create-react-app frontend
+
+Install NPM packages:
+react-bootstrap
+react-router-bootstrap
+react-router-dom
+
+
+Install Axios:
+npm install axios
+
+
+Django-React connect:
+package.json ekleme yapıyoruz name altına:
+"proxy": "http://127.0.0.1:8000",

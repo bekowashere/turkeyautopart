@@ -1,0 +1,36 @@
+Instal Virtual Environment
+pip install virtualenv
+virtualenv myenv
+
+Activate:
+myenv\scripts\activate
+
+Django install:
+pip install django 
+
+Create Project:
+django-admin startproject backend
+
+First App Create:
+python manage.py startapp base
+
+Create Superuser:
+python manage.py createsuperuser
+admin-berke123
+
+Install Django Rest Framework:
+pip install djangorestframework
+pip install markdown       # Markdown support for the browsable API.
+pip install django-filter  # Filtering support
+// https://www.django-rest-framework.org/#requirements
+
+Django-React Bağlantısı !!
+// https://pypi.org/project/django-cors-headers/
+Django Cors Headers Install:
+pip install django-cors-headers
+
+
+Images:
+pip install Pillow
+pip install django-cleanup -> settings.py add INSTALLED_APPS
+
