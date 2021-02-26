@@ -45,7 +45,7 @@ class Order(models.Model):
     _id = models.AutoField(primary_key=True, editable=False)
 
     def __str__(self):
-        return self.user+' - '+self.totalPrice+' - '+str(self.createdAt)
+        return str(self.createdAt)
 
 
 class OrderItem(models.Model):
@@ -71,6 +71,6 @@ class ShippingAddress(models.Model):
     _id = models.AutoField(primary_key=True, editable=False)
 
     def __str__(self):
-        return self.address
+        return str(self.address)
 
 

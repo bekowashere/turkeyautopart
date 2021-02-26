@@ -1,0 +1,114 @@
+-------------------------------------------------------------------------------------------------------------
+Permissions Nasıl yapılacağını öğren
+
+
+MEVCUT DURUM:
+-Custom permissions ile hallettik. Superuser dışındakiler Update ve Delete işlemi yapamıyor
+api>permissions>IsSuperuser
+
+
+-permission_classes = [IsAdminUser] ile hallettik. Admin ve superuser dışındakiler Create işlemi yapamıyor
+from rest_framework.permissions import IsAdminUser
+
+
+*** has_permission ***
+has_permission methodu ne method olursa olsun (GET,PUT,DELETE..) çalışır kuralları dinlemez.
+Kullanıcı henüz giriş yapmamış ama her zaman tetikleniyor, çalışıyor.
+Bu method sayesinde, giriş yapılmadığı zaman DELETE butonu çıkmayacak ve uyarı verecek.
+
+
+*** has_object_permission ***
+Örnek olarak product/delete/1 urlsine gittiğimiz zaman:
+DELETE tuşuna bastığımız anda has_object_permission çalışır.
+Yani bu method sadece kendisine izin verilen(allow) yerde çalışır.
+DELETE basıldığı zaman tetikleniyor, çalışıyor. DELETE butonu zaten giriş yapıldığı zaman görünüyor
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+Serializer mantığı:
+>>> obj = Product.object.first()
+>>> obj.name
+'Airpod Kulaklık'
+>>> data = {burada modeldeki zorunlu alanları giriyorruz dictionary olarak}
+// eksiksiz girmemiz gerekiyor girmezse is_valid() false döner 
+>>> update = ProductSerializer(obj, data=data)
+>>> update.is_valid()
+True
+>>> update.save()
+<Product: Update edilen başlık mesela>
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+!!! RetrieveUpdateAPIView !!!
+Update işleminde input alanları dolu gelmesi için bu classı kullanıyoruz
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+Product ile Kullanıcı İlişkilendirme:
+@perform_create --> CreateAPIView > CreateModelMixin > perform_create
+def perform_create(self, serializer):
+    serializer.save(user=self.request.user)
+    # burada mail fonksiyonlarını kullanarak mail gönderebiliriz
+
+@perform_update
+Örnek olarak koyuyorum: modified_by diye bir şey eklenebilir
+def perform_update(self, serializer):
+        serializer.save(modified_by=self.request.user)
+
+// https://www.django-rest-framework.org/api-guide/generic-views/
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+Filtreleme
+
+filter_backends = [SearchFilter]
+search_fields = ['name']
+http://127.0.0.1:8000/api/products?search=Dene
+
+filter_backends = [SearchFilter, OrderingFilter]
+http://127.0.0.1:8000/api/products?ordering=name
+
+Birlikte Kullanımı:
+http://127.0.0.1:8000/api/products?search=Dene&ordering=name
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+PAGINATIONS
+api>paginations.py
+from rest_framework.pagination import PageNumberPagination
+class ProductPagination(PageNumberPagination):
+    page_size = 2
+
+views.py > ProductListAPIView added:
+pagination_class = ProductPagination
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+serializers.py >>
+SerializerMethodField
+
+user parametresi kullanıcının id'si olarak gözüküyor ama biz bunun yerine kullanıcının username'nin gözükmesini
+istiyorsak bu methodu kullanacağız
+
+user = serializers.SerializerMethodField()
+def get_user(self, obj):
+    return str(obj.user.username)
+
+bu kodlardan sonra user:'admin' olarak gözükecek
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
