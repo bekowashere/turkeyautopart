@@ -14,3 +14,18 @@ npm install axios
 Django-React connect:
 package.json ekleme yapıyoruz name altına:
 "proxy": "http://127.0.0.1:8000",
+
+Redux part:
+npm install redux react-redux redux-thunk redux-devtools-extensions
+
+store oluşturuyoruz:
+store.js oluşturuyoruz ve bütün işlemlerimleri bunun içinde yapıyoruz
+createStore, combineReducers, applyMiddleware
+
+index.js Provider dahil ediyoruz ki store ekleyebilelim
+
+
+reducers > constants > actions
+
+HomeScreen'de artık API isteği (axios) olmayacak. Stateden çekeceğiz
+import { useDispatch, useSelector } from 'react-redux'
