@@ -28,6 +28,7 @@ Django-React Bağlantısı !!
 // https://pypi.org/project/django-cors-headers/
 Django Cors Headers Install:
 pip install django-cors-headers
+Middleware eklentisi yapılacak
 
 
 Images:

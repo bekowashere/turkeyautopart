@@ -15,7 +15,7 @@ class ProductListAPIView(ListAPIView):
     serializer_class = ProductSerializer
     filter_backends = [SearchFilter,OrderingFilter]
     search_fields = ['name']
-    pagination_class = ProductPagination
+    # pagination_class = ProductPagination
 
 class ProductDetailAPIView(RetrieveAPIView):
     queryset = Product.objects.all()
