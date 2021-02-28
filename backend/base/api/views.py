@@ -21,18 +21,18 @@ class ProductDetailAPIView(RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     # ! lookup_field varsayılan olarak 'pk' dir.
-    lookup_field = 'pk'
+    lookup_field = 'slug'
 
 class ProductDeleteAPIView(DestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    lookup_field = 'pk'
+    lookup_field = 'slug'
     permission_classes = [IsSuperuser]
 
 class ProductUpdateAPIView(RetrieveUpdateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    lookup_field = 'pk'
+    lookup_field = 'slug'
     permission_classes = [IsSuperuser]
 
 class ProductCreateAPIView(CreateAPIView):

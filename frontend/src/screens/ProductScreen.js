@@ -20,7 +20,7 @@ function ProductScreen({ match }) {
   const { loading, error, product } = productDetails;
 
   useEffect(() => {
-    dispatch(listProductDetails(match.params.id));
+    dispatch(listProductDetails(match.params.slug));
   }, []);
 
   return (

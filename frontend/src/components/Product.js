@@ -14,11 +14,11 @@ TODO: react-router-dom import Link
 function Product({ product }) {
   return (
     <Card className="my-3 p-3 rounded">
-      <Link to={`/product/${product._id}`}>
+      <Link to={`/product/${product.slug}`}>
         <Card.Img src={product.image} />
 
         <Card.Body>
-          <Link to={`/product/${product._id}`}>
+          <Link to={`/product/${product.slug}`}>
             <Card.Title as="div">
               <strong>{product.name}</strong>
             </Card.Title>

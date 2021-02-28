@@ -11,6 +11,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_editable = ('brand', 'category', 'price')
     search_fields = ('name', 'brand', 'category')
     list_filter = ('brand', 'category')
+    prepopulated_fields = {'slug': ('brand','name',)}
 
     class Meta:
         model = Product
