@@ -35,3 +35,6 @@ Images:
 pip install Pillow
 pip install django-cleanup -> settings.py add INSTALLED_APPS
 
+MPTT
+İç içe kategoriler eklendi
+

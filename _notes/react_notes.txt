@@ -29,3 +29,10 @@ reducers > constants > actions
 
 HomeScreen'de artık API isteği (axios) olmayacak. Stateden çekeceğiz
 import { useDispatch, useSelector } from 'react-redux'
+
+
+
+
+----------------------------
+add to cart dediğimiz zaman cart sekmesine gidiyoruz ama ürünü orda değiştirince refresh yaptığımızda yine aynı kalıyor urldeki bilgi yüzünden
+ÇÖZÜMÜNÜ BUL

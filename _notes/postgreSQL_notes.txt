@@ -4,6 +4,7 @@ Install requirements:
 pip install psycopg2
 pip install psycopg2-binary
 
+Eklenecek ayarlar:
 
 settings.py:
 DATABASES = {

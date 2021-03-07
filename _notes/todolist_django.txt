@@ -1,3 +1,2 @@
 Product Model:
 > brand model yazılacak - ForeignKey
-> category model yazılacak - ForeignKey
