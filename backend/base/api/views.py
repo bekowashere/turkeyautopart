@@ -1,5 +1,6 @@
 from base.models import Product, Category, Review
-from base.api.serializers import ProductSerializer, CategorySerializer, ReviewSerializer
+from django.contrib.auth.models import User
+from base.api.serializers import ProductSerializer, CategorySerializer, ReviewSerializer, UserSerializer
 from rest_framework.generics import (
     ListAPIView,
     RetrieveAPIView,
@@ -8,9 +9,12 @@ from rest_framework.generics import (
     RetrieveUpdateAPIView
 )
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from base.api.permissions import IsSuperuser, IsOwner
+from base.api.permissions import IsSuperuser, IsOwner, IsOwnerProfile
 from rest_framework.filters import SearchFilter, OrderingFilter
 from base.api.paginations import ProductPagination
+
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 # ! PRODUCT
 class ProductListAPIView(ListAPIView):
@@ -114,3 +118,41 @@ class ReviewCreateAPIView(CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+# ! TOKEN CUSTOMIZATION
+# class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+#     @classmethod
+#     def get_token(cls, user):
+#         token = super().get_token(user)
+
+#         # Add custom claims
+#         token['username'] = user.username
+#         token['email'] = user.email
+#         # ...
+
+#         return token
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+   def validate(self, attrs):
+       data = super().validate(attrs)
+
+       data['username'] = self.user.username
+       data['email'] = self.user.email
+
+       return data
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
+
+# ! PRODUCT
+class UserListAPIView(ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsSuperuser]
+    
+class UserDetailAPIView(RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsOwnerProfile]

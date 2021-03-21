@@ -1,0 +1,25 @@
+install package:
+pip install djangorestframework-simplejwt
+
+settings.py:
+REST_FRAMEWORK = { 
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
+
+
+TOKEN CUSTOMIZATION:
+https://django-rest-framework-simplejwt.readthedocs.io/en/latest/customizing_token_claims.html
+
+githubdaki reposundan alınan ( def validate ) daha iyi ona bakılacak
+
+
+!! permission_classes
+UserList sadece superuser görüntüleyebilir
+UserDetail sadece superuser ve o profile sahip kullanıcı görüntüleyebilir. Bunun için IsOwnerProfile classı yazıldı permissions.py'de

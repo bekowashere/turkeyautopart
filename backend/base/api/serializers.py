@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from base.models import Product, Category, Review
+from django.contrib.auth.models import User
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -67,3 +68,23 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = '__all__'
+
+
+# ! USER SERIALIZER
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'first_name',
+            'last_name',
+            'username',
+            'email',
+            'password',
+            'is_staff',
+            'is_superuser',
+            'is_active',
+            'date_joined',
+            'last_login'
+            
+        ]
