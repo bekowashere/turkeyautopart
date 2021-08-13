@@ -17,7 +17,8 @@ from base.api.views import (
     ReviewCreateAPIView,
     MyTokenObtainPairView,
     UserListAPIView,
-    UserDetailAPIView
+    UserDetailAPIView,
+    UserRegisterAPIView
 )
 
 from rest_framework_simplejwt.views import (
@@ -48,6 +49,7 @@ urlpatterns = [
 
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('register/', UserRegisterAPIView.as_view(), name='register'),
 
     path('users', UserListAPIView.as_view(), name='user_list'),
     path('users/<pk>', UserDetailAPIView.as_view(), name='user_detail'),

@@ -1,6 +1,8 @@
+from rest_framework import serializers
+from rest_framework.views import APIView
 from base.models import Product, Category, Review
 from django.contrib.auth.models import User
-from base.api.serializers import ProductSerializer, CategorySerializer, ReviewSerializer, UserSerializer
+from base.api.serializers import ProductSerializer, CategorySerializer, ReviewSerializer, UserSerializer, UserSerializerWithToken
 from rest_framework.generics import (
     ListAPIView,
     RetrieveAPIView,
@@ -8,13 +10,17 @@ from rest_framework.generics import (
     CreateAPIView,
     RetrieveUpdateAPIView
 )
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from base.api.permissions import IsSuperuser, IsOwner, IsOwnerProfile
 from rest_framework.filters import SearchFilter, OrderingFilter
 from base.api.paginations import ProductPagination
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+
+from rest_framework.response import Response
+from django.contrib.auth.hashers import make_password
+from rest_framework import status
 
 # ! PRODUCT
 class ProductListAPIView(ListAPIView):
@@ -137,8 +143,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
    def validate(self, attrs):
        data = super().validate(attrs)
 
-       data['username'] = self.user.username
-       data['email'] = self.user.email
+       serializer = UserSerializerWithToken(self.user).data
+       for k,v in serializer.items():
+           data[k] = v
 
        return data
 
@@ -156,3 +163,38 @@ class UserDetailAPIView(RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsOwnerProfile]
+
+class UserRegisterAPIView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    def post(self, request):
+        data = request.data
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
+        username = data.get('email')
+        email = data.get('email')
+        password = data.get('password')
+        
+        messages = {'errors': []}
+        if email == None:
+            messages['errors'].append('email cant be empty')
+        if password == None:
+            messages['errors'].append('password cant be empty')
+        if User.objects.filter(email=email).exists():
+            messages['errors'].append('account already exists with this email')
+        if len(messages['errors']) >0:
+            return Response({'detail':messages['errors']}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            user = User.objects.create(
+                username=username,
+                email=email,
+                first_name=first_name,
+                last_name=last_name,
+                password=make_password(password)
+            )
+            serializer = UserSerializerWithToken(user, many=False)
+        except Exception as e:
+            print(e)
+            return Response({'detail':f'{e}'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data)
